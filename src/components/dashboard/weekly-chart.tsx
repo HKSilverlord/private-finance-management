@@ -15,9 +15,9 @@ import { formatCurrencyShort } from '@/utils/format';
 
 interface WeeklyData {
   week: string;
-  'Sáng': number;
-  'Trưa': number;
-  'Tối': number;
+  Sang: number;
+  Trua: number;
+  Toi: number;
   total: number;
 }
 
@@ -29,7 +29,7 @@ export function WeeklyChart({ data }: WeeklyChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-lg">Chi tiêu theo tuần</CardTitle>
+        <CardTitle className="text-lg">Chi tieu theo tuan</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">
@@ -46,10 +46,10 @@ export function WeeklyChart({ data }: WeeklyChartProps) {
                 tick={{ fontSize: 12 }}
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => formatCurrencyShort(value)}
+                tickFormatter={(value) => formatCurrencyShort(Number(value))}
               />
               <Tooltip
-                formatter={(value: number) => formatCurrencyShort(value)}
+                formatter={(value) => formatCurrencyShort(Number(value ?? 0))}
                 contentStyle={{
                   backgroundColor: 'hsl(var(--card))',
                   border: '1px solid hsl(var(--border))',
@@ -57,24 +57,9 @@ export function WeeklyChart({ data }: WeeklyChartProps) {
                 }}
               />
               <Legend />
-              <Bar
-                dataKey="Sáng"
-                stackId="a"
-                fill="hsl(var(--chart-1))"
-                radius={[0, 0, 0, 0]}
-              />
-              <Bar
-                dataKey="Trưa"
-                stackId="a"
-                fill="hsl(var(--chart-2))"
-                radius={[0, 0, 0, 0]}
-              />
-              <Bar
-                dataKey="Tối"
-                stackId="a"
-                fill="hsl(var(--chart-3))"
-                radius={[4, 4, 0, 0]}
-              />
+              <Bar dataKey="Sang" stackId="a" fill="hsl(var(--chart-1))" radius={[0, 0, 0, 0]} />
+              <Bar dataKey="Trua" stackId="a" fill="hsl(var(--chart-2))" radius={[0, 0, 0, 0]} />
+              <Bar dataKey="Toi" stackId="a" fill="hsl(var(--chart-3))" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

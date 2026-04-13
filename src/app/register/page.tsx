@@ -1,13 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { Wallet, Loader2, CheckCircle } from 'lucide-react';
 
 export default function RegisterPage() {
@@ -25,12 +32,12 @@ export default function RegisterPage() {
     setError(null);
 
     if (password !== confirmPassword) {
-      setError('Mật khẩu xác nhận không khớp');
+      setError('Mat khau xac nhan khong khop');
       return;
     }
 
     if (password.length < 6) {
-      setError('Mật khẩu phải có ít nhất 6 ký tự');
+      setError('Mat khau phai co it nhat 6 ky tu');
       return;
     }
 
@@ -51,7 +58,7 @@ export default function RegisterPage() {
 
       setSuccess(true);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : 'Đã có lỗi xảy ra';
+      const errorMessage = err instanceof Error ? err.message : 'Da co loi xay ra';
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -68,15 +75,15 @@ export default function RegisterPage() {
                 <CheckCircle className="h-8 w-8 text-green-600" />
               </div>
             </div>
-            <CardTitle className="text-2xl">Đăng ký thành công!</CardTitle>
+            <CardTitle className="text-2xl">Dang ky thanh cong!</CardTitle>
             <CardDescription>
-              Vui lòng kiểm tra email để xác nhận tài khoản
+              Vui long kiem tra email de xac nhan tai khoan
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button asChild className="w-full">
-              <Link href="/login">Quay lại đăng nhập</Link>
-            </Button>
+            <Link href="/login" className={cn(buttonVariants(), 'w-full')}>
+              Quay lai dang nhap
+            </Link>
           </CardFooter>
         </Card>
       </div>
@@ -92,9 +99,9 @@ export default function RegisterPage() {
               <Wallet className="h-8 w-8 text-primary" />
             </div>
           </div>
-          <CardTitle className="text-2xl">Tạo tài khoản</CardTitle>
+          <CardTitle className="text-2xl">Tao tai khoan</CardTitle>
           <CardDescription>
-            Bắt đầu quản lý chi phí gia đình ngay hôm nay
+            Bat dau quan ly chi phi gia dinh ngay hom nay
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleRegister}>
@@ -105,11 +112,11 @@ export default function RegisterPage() {
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="fullName">Họ và tên</Label>
+              <Label htmlFor="fullName">Ho va ten</Label>
               <Input
                 id="fullName"
                 type="text"
-                placeholder="Nguyễn Văn A"
+                placeholder="Nguyen Van A"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
@@ -129,7 +136,7 @@ export default function RegisterPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Mật khẩu</Label>
+              <Label htmlFor="password">Mat khau</Label>
               <Input
                 id="password"
                 type="password"
@@ -141,7 +148,7 @@ export default function RegisterPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Xác nhận mật khẩu</Label>
+              <Label htmlFor="confirmPassword">Xac nhan mat khau</Label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -156,12 +163,12 @@ export default function RegisterPage() {
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Đăng ký
+              Dang ky
             </Button>
             <p className="text-sm text-muted-foreground text-center">
-              Đã có tài khoản?{' '}
+              Da co tai khoan?{' '}
               <Link href="/login" className="text-primary hover:underline">
-                Đăng nhập
+                Dang nhap
               </Link>
             </p>
           </CardFooter>

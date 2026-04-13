@@ -11,24 +11,28 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { formatCurrency, formatDate, formatMonth, getFirstDayOfMonth } from '@/utils/format';
+import { DailyExpense } from '@/types/database';
 import { Sun, CloudSun, Moon } from 'lucide-react';
 
 const timeIcons = {
-  'Sáng': Sun,
-  'Trưa': CloudSun,
-  'Tối': Moon,
+  'SÃ¡ng': Sun,
+  'TrÆ°a': CloudSun,
+  'Tá»‘i': Moon,
 };
 
 const timeColors = {
-  'Sáng': 'bg-yellow-100 text-yellow-800',
-  'Trưa': 'bg-orange-100 text-orange-800',
-  'Tối': 'bg-indigo-100 text-indigo-800',
+  'SÃ¡ng': 'bg-yellow-100 text-yellow-800',
+  'TrÆ°a': 'bg-orange-100 text-orange-800',
+  'Tá»‘i': 'bg-indigo-100 text-indigo-800',
 };
 
 export default async function ExpensesPage() {
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) redirect('/login');
 
   const { data: profile } = await supabase
@@ -38,7 +42,7 @@ export default async function ExpensesPage() {
     .single();
 
   if (!profile?.household_id) {
-    return <div>Đang tải...</div>;
+    return <div>Dang tai...</div>;
   }
 
   const currentMonth = getFirstDayOfMonth();
@@ -53,42 +57,39 @@ export default async function ExpensesPage() {
     .order('date', { ascending: false })
     .order('time_of_day');
 
-  // Group by date
-  const groupedByDate = expenses?.reduce((acc, expense) => {
+  const groupedByDate = (expenses ?? []).reduce<Record<string, DailyExpense[]>>((acc, expense) => {
     const date = expense.date;
     if (!acc[date]) acc[date] = [];
-    acc[date].push(expense);
+    acc[date].push(expense as DailyExpense);
     return acc;
-  }, {} as Record<string, typeof expenses>);
+  }, {});
 
-  // Calculate totals
   const totalByTime = {
-    'Sáng': expenses?.filter(e => e.time_of_day === 'Sáng').reduce((s, e) => s + e.amount, 0) ?? 0,
-    'Trưa': expenses?.filter(e => e.time_of_day === 'Trưa').reduce((s, e) => s + e.amount, 0) ?? 0,
-    'Tối': expenses?.filter(e => e.time_of_day === 'Tối').reduce((s, e) => s + e.amount, 0) ?? 0,
+    'SÃ¡ng': expenses?.filter((expense) => expense.time_of_day === 'SÃ¡ng').reduce((sum, expense) => sum + expense.amount, 0) ?? 0,
+    'TrÆ°a': expenses?.filter((expense) => expense.time_of_day === 'TrÆ°a').reduce((sum, expense) => sum + expense.amount, 0) ?? 0,
+    'Tá»‘i': expenses?.filter((expense) => expense.time_of_day === 'Tá»‘i').reduce((sum, expense) => sum + expense.amount, 0) ?? 0,
   };
-  const total = Object.values(totalByTime).reduce((s, v) => s + v, 0);
+  const total = Object.values(totalByTime).reduce((sum, value) => sum + value, 0);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Chi tiêu hàng ngày</h1>
+        <h1 className="text-2xl font-bold">Chi tieu hang ngay</h1>
         <p className="text-muted-foreground">{formatMonth(new Date())}</p>
       </div>
 
-      {/* Summary Cards */}
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Tổng chi tiêu
+              Tong chi tieu
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(total)}</div>
           </CardContent>
         </Card>
-        {(['Sáng', 'Trưa', 'Tối'] as const).map((time) => {
+        {(['SÃ¡ng', 'TrÆ°a', 'Tá»‘i'] as const).map((time) => {
           const Icon = timeIcons[time];
           return (
             <Card key={time}>
@@ -108,10 +109,9 @@ export default async function ExpensesPage() {
         })}
       </div>
 
-      {/* Expenses by Date */}
       <div className="space-y-4">
-        {groupedByDate && Object.entries(groupedByDate).map(([date, dayExpenses]) => {
-          const dayTotal = dayExpenses?.reduce((s, e) => s + e.amount, 0) ?? 0;
+        {Object.entries(groupedByDate).map(([date, dayExpenses]) => {
+          const dayTotal = dayExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
           return (
             <Card key={date}>
@@ -125,13 +125,13 @@ export default async function ExpensesPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Buổi</TableHead>
-                      <TableHead>Số tiền</TableHead>
-                      <TableHead>Ghi chú</TableHead>
+                      <TableHead>Buoi</TableHead>
+                      <TableHead>So tien</TableHead>
+                      <TableHead>Ghi chu</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {dayExpenses?.map((expense) => {
+                    {dayExpenses.map((expense) => {
                       const Icon = timeIcons[expense.time_of_day as keyof typeof timeIcons];
                       return (
                         <TableRow key={expense.id}>
@@ -163,7 +163,7 @@ export default async function ExpensesPage() {
         {(!expenses || expenses.length === 0) && (
           <Card>
             <CardContent className="p-6 text-center text-muted-foreground">
-              Chưa có chi tiêu nào trong tháng này
+              Chua co chi tieu nao trong thang nay
             </CardContent>
           </Card>
         )}

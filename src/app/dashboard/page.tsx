@@ -6,20 +6,17 @@ import { QuickAddExpense } from '@/components/dashboard/quick-add-expense';
 import { WeeklyChart } from '@/components/dashboard/weekly-chart';
 import { FinancialHealth } from '@/components/dashboard/financial-health';
 import { formatCurrency, formatMonth, getFirstDayOfMonth } from '@/utils/format';
-import {
-  Wallet,
-  TrendingDown,
-  CreditCard,
-  PiggyBank,
-} from 'lucide-react';
+import { Wallet, TrendingDown, CreditCard, PiggyBank } from 'lucide-react';
 
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   if (!user) redirect('/login');
 
-  // Get user's profile and household
   const { data: profile } = await supabase
     .from('profiles')
     .select('*, households(*)')
@@ -29,15 +26,15 @@ export default async function DashboardPage() {
   if (!profile?.household_id) {
     return (
       <div className="flex items-center justify-center h-[50vh]">
-        <p className="text-muted-foreground">Đang thiết lập tài khoản...</p>
+        <p className="text-muted-foreground">Dang thiet lap tai khoan...</p>
       </div>
     );
   }
 
   const householdId = profile.household_id;
   const currentMonth = getFirstDayOfMonth();
+  const today = new Date().toISOString().split('T')[0];
 
-  // Fetch data in parallel
   const [
     { data: monthlyIncomes },
     { data: debts },
@@ -59,7 +56,7 @@ export default async function DashboardPage() {
       .select('*')
       .eq('household_id', householdId)
       .gte('date', currentMonth)
-      .lte('date', new Date().toISOString().split('T')[0]),
+      .lte('date', today),
     supabase
       .from('fixed_expenses')
       .select('*')
@@ -67,83 +64,79 @@ export default async function DashboardPage() {
       .eq('is_active', true),
   ]);
 
-  // Calculate totals
-  const totalIncome = monthlyIncomes?.reduce((sum, i) => sum + i.amount, 0) ?? 0;
-  const totalDailyExpenses = dailyExpenses?.reduce((sum, e) => sum + e.amount, 0) ?? 0;
-  const totalDebtPayments = debts?.reduce((sum, d) => sum + d.monthly_payment, 0) ?? 0;
-  const totalFixedExpenses = fixedExpenses?.reduce((sum, f) => sum + f.amount, 0) ?? 0;
+  const totalIncome = monthlyIncomes?.reduce((sum, income) => sum + income.amount, 0) ?? 0;
+  const totalDailyExpenses = dailyExpenses?.reduce((sum, expense) => sum + expense.amount, 0) ?? 0;
+  const totalDebtPayments = debts?.reduce((sum, debt) => sum + debt.monthly_payment, 0) ?? 0;
+  const totalFixedExpenses = fixedExpenses?.reduce((sum, expense) => sum + expense.amount, 0) ?? 0;
   const totalExpenses = totalDailyExpenses + totalDebtPayments + totalFixedExpenses;
   const balance = totalIncome - totalExpenses;
 
-  // Calculate total monthly interest from high-interest debts
-  const totalInterestPerMonth = debts?.reduce((sum, d) => {
-    return sum + (d.total_amount * d.interest_rate / 100 / 12);
-  }, 0) ?? 0;
+  const totalInterestPerMonth =
+    debts?.reduce((sum, debt) => sum + debt.total_amount * debt.interest_rate / 100 / 12, 0) ?? 0;
 
-  // Calculate weekly data for chart
   const weeklyData = [1, 2, 3, 4, 5].map((week) => {
-    const weekExpenses = dailyExpenses?.filter((e) => {
-      const day = new Date(e.date).getDate();
-      const weekNum = Math.ceil(day / 7);
-      return weekNum === week;
-    }) ?? [];
+    const weekExpenses =
+      dailyExpenses?.filter((expense) => Math.ceil(new Date(expense.date).getDate() / 7) === week) ?? [];
 
     return {
-      week: `Tuần ${week}`,
-      'Sáng': weekExpenses.filter((e) => e.time_of_day === 'Sáng').reduce((s, e) => s + e.amount, 0),
-      'Trưa': weekExpenses.filter((e) => e.time_of_day === 'Trưa').reduce((s, e) => s + e.amount, 0),
-      'Tối': weekExpenses.filter((e) => e.time_of_day === 'Tối').reduce((s, e) => s + e.amount, 0),
-      total: weekExpenses.reduce((s, e) => s + e.amount, 0),
+      week: `Tuan ${week}`,
+      Sang: weekExpenses
+        .filter((expense) => expense.time_of_day === 'SÃ¡ng')
+        .reduce((sum, expense) => sum + expense.amount, 0),
+      Trua: weekExpenses
+        .filter((expense) => expense.time_of_day === 'TrÆ°a')
+        .reduce((sum, expense) => sum + expense.amount, 0),
+      Toi: weekExpenses
+        .filter((expense) => expense.time_of_day === 'Tá»‘i')
+        .reduce((sum, expense) => sum + expense.amount, 0),
+      total: weekExpenses.reduce((sum, expense) => sum + expense.amount, 0),
     };
   });
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Tổng quan</h1>
+        <h1 className="text-2xl font-bold">Tong quan</h1>
         <p className="text-muted-foreground">{formatMonth(new Date())}</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard
-          title="Thu nhập"
+          title="Thu nhap"
           value={formatCurrency(totalIncome)}
           icon={Wallet}
-          description="Tổng thu nhập tháng này"
+          description="Tong thu nhap thang nay"
           valueClassName="text-green-600"
         />
         <StatsCard
-          title="Chi tiêu"
+          title="Chi tieu"
           value={formatCurrency(totalExpenses)}
           icon={TrendingDown}
-          description="Tổng chi tiêu tháng này"
+          description="Tong chi tieu thang nay"
           valueClassName="text-red-600"
         />
         <StatsCard
-          title="Trả nợ"
+          title="Tra no"
           value={formatCurrency(totalDebtPayments)}
           icon={CreditCard}
-          description={`${debts?.length ?? 0} khoản nợ`}
+          description={`${debts?.length ?? 0} khoan no`}
         />
         <StatsCard
-          title="Số dư"
+          title="So du"
           value={formatCurrency(balance)}
           icon={PiggyBank}
-          description={balance >= 0 ? 'Còn dư' : 'Thiếu hụt'}
+          description={balance >= 0 ? 'Con du' : 'Thieu hut'}
           valueClassName={balance >= 0 ? 'text-green-600' : 'text-red-600'}
         />
       </div>
 
-      {/* Main Content */}
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
-          {/* Financial Health Card - Full width on mobile, top of left column */}
           <FinancialHealth
             totalIncome={totalIncome}
             totalDebtPayments={totalDebtPayments}
             totalInterestPerMonth={totalInterestPerMonth}
-            emergencyFund={0} // TODO: Add emergency fund tracking
+            emergencyFund={0}
           />
           <WeeklyChart data={weeklyData} />
         </div>
