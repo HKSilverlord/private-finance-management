@@ -25,11 +25,22 @@ export default async function DashboardPage() {
     );
   }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: authData } = await supabase.auth.getUser();
+  const user = authData?.user;
 
-  if (!user) redirect('/login');
+  // Handle no user gracefully instead of redirecting
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center h-[50vh]">
+        <div className="text-center space-y-4">
+          <p className="text-muted-foreground">Vui lòng đăng nhập để xem dữ liệu của bạn.</p>
+          <a href="/login" className="inline-block px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm">
+            Đăng nhập ngay
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   try {
     const { data: profile, error: profileError } = await supabase
@@ -42,14 +53,14 @@ export default async function DashboardPage() {
       return (
         <div className="flex items-center justify-center h-[50vh]">
           <div className="text-center space-y-4">
-            <p className="text-muted-foreground">Đang thiết lập tài khoản...</p>
+            <p className="text-muted-foreground">Đang thiết lập tài khoản hoặc không tìm thấy nhóm chi phí...</p>
             {profileError && (
               <p className="text-xs text-destructive">
-                Lỗi: {profileError.message}
+                Chi tiết: {profileError.message}
               </p>
             )}
             <p className="text-xs text-muted-foreground">
-              Nếu lỗi này kéo dài, hãy chạy lại file SQL migration trong Supabase SQL Editor.
+              Vui lòng đảm bảo bạn đã chạy SQL Migration trong Supabase SQL Editor.
             </p>
           </div>
         </div>
@@ -59,6 +70,7 @@ export default async function DashboardPage() {
     const householdId = profile.household_id;
     const currentMonth = getFirstDayOfMonth();
     const today = new Date().toISOString().split('T')[0];
+
 
     const [
       { data: monthlyIncomes },

@@ -37,23 +37,23 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Protected routes
-  const protectedPaths = ['/dashboard', '/debts', '/expenses', '/settings'];
-  const isProtectedPath = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path)
-  );
+  // Protected routes - REMOVED mandatory redirect for now as requested
+  // const protectedPaths = ['/dashboard', '/debts', '/expenses', '/settings'];
+  // const isProtectedPath = protectedPaths.some((path) =>
+  //   request.nextUrl.pathname.startsWith(path)
+  // );
 
-  if (!user && isProtectedPath) {
-    // No user, redirect to login
-    const url = request.nextUrl.clone();
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
-  }
+  // if (!user && isProtectedPath) {
+  //   // No user, redirect to login
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/login';
+  //   return NextResponse.redirect(url);
+  // }
 
   if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register')) {
-    // User is logged in, redirect to dashboard
+    // User is logged in, redirect to home
     const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
+    url.pathname = '/';
     return NextResponse.redirect(url);
   }
 

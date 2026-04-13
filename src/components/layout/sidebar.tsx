@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
 const navigation = [
-  { name: 'Tong quan', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Tong quan', href: '/', icon: LayoutDashboard },
   { name: 'No & The tin dung', href: '/debts', icon: CreditCard },
   { name: 'Thu nhap', href: '/income', icon: Wallet },
   { name: 'Chi tieu hang ngay', href: '/expenses', icon: Receipt },
