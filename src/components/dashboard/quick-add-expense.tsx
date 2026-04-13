@@ -26,7 +26,6 @@ export function QuickAddExpense({ householdId, onSuccess }: QuickAddExpenseProps
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>('Sáng');
   const [note, setNote] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const supabase = createClient();
 
   // Auto-detect time of day
   useState(() => {
@@ -42,6 +41,7 @@ export function QuickAddExpense({ householdId, onSuccess }: QuickAddExpenseProps
 
     setIsLoading(true);
     try {
+      const supabase = createClient();
       const { error } = await supabase.from('daily_expenses').insert({
         household_id: householdId,
         date: new Date().toISOString().split('T')[0],
