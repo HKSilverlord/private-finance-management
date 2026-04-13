@@ -31,7 +31,7 @@ export default function LoginPage() {
 
       if (error) throw error;
 
-      router.push('/dashboard');
+      router.push('/');
       router.refresh();
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : 'Đã có lỗi xảy ra';

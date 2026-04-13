@@ -43,22 +43,18 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  // Protected routes - REMOVED mandatory redirect for now as requested
-  // const protectedPaths = ['/dashboard', '/debts', '/expenses', '/settings'];
-  // const isProtectedPath = protectedPaths.some((path) =>
-  //   request.nextUrl.pathname.startsWith(path)
-  // );
-
-  // if (!user && isProtectedPath) {
-  //   // No user, redirect to login
-  //   const url = request.nextUrl.clone();
-  //   url.pathname = '/login';
-  //   return NextResponse.redirect(url);
-  // }
+  let user = null;
+  try {
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+      console.error('[Proxy] getUser error:', error.message);
+    }
+    user = data?.user ?? null;
+  } catch (err) {
+    console.error('[Proxy] getUser threw:', err);
+    // Don't crash the proxy - just continue without a user
+    return supabaseResponse;
+  }
 
   if (user && (request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/register')) {
     // User is logged in, redirect to home
