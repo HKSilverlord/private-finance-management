@@ -164,21 +164,14 @@ export default async function DashboardPage() {
         <div className="text-center space-y-4 p-8 bg-muted rounded-2xl">
           <p className="text-destructive font-bold">Lỗi không mong muốn</p>
           <p className="text-sm text-muted-foreground">Ứng dụng gặp sự cố khi hiển thị dữ liệu.</p>
-          <Button onClick={() => window.location.reload()} variant="outline">Tải lại trang</Button>
+          <a
+            href="/"
+            className="inline-block px-4 py-2 text-sm rounded-md border bg-background hover:bg-accent"
+          >
+            Tải lại trang
+          </a>
         </div>
       </div>
     );
   }
-}
-
-// Client-side reload helper
-function Button({ children, onClick, variant }: any) {
-  return (
-    <button 
-      onClick={onClick}
-      className={`px-4 py-2 text-sm rounded-md border ${variant === 'outline' ? 'bg-background hover:bg-accent' : ''}`}
-    >
-      {children}
-    </button>
-  );
 }
