@@ -6,6 +6,8 @@ import { WeeklyChart } from '@/components/dashboard/weekly-chart';
 import { FinancialHealth } from '@/components/dashboard/financial-health';
 import { formatCurrency, formatMonth, getFirstDayOfMonth } from '@/utils/format';
 import { Wallet, TrendingDown, CreditCard, PiggyBank } from 'lucide-react';
+import { StaggerReveal } from '@/components/landing/StaggerReveal';
+import { ScrollReveal } from '@/components/landing/ScrollReveal';
 
 export default async function DashboardPage() {
   let supabase;
@@ -118,7 +120,7 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <StaggerReveal className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatsCard title="Thu nhập" value={formatCurrency(totalIncome)} icon={<Wallet className="h-5 w-5" />} description="Thu nhập tháng này" valueClassName="text-green-600" />
         <StatsCard title="Chi tiêu" value={formatCurrency(totalExpenses)} icon={<TrendingDown className="h-5 w-5" />} description="Chi tiêu tháng này" valueClassName="text-red-600" />
         <StatsCard title="Trả nợ" value={formatCurrency(totalDebtPayments)} icon={<CreditCard className="h-5 w-5" />} description={`${debts.length} khoản nợ`} />
@@ -129,16 +131,24 @@ export default async function DashboardPage() {
           description={balance >= 0 ? 'Thặng dư' : 'Thâm hụt'}
           valueClassName={balance >= 0 ? 'text-green-600' : 'text-red-600'}
         />
-      </div>
+      </StaggerReveal>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
-          <FinancialHealth totalIncome={totalIncome} totalDebtPayments={totalDebtPayments} totalInterestPerMonth={totalInterestPerMonth} emergencyFund={0} />
-          <WeeklyChart data={weeklyData} />
+          <ScrollReveal direction="up" delay={0.2}>
+            <FinancialHealth totalIncome={totalIncome} totalDebtPayments={totalDebtPayments} totalInterestPerMonth={totalInterestPerMonth} emergencyFund={0} />
+          </ScrollReveal>
+          <ScrollReveal direction="up" delay={0.3}>
+            <WeeklyChart data={weeklyData} />
+          </ScrollReveal>
         </div>
         <div className="space-y-6">
-          <QuickAddExpense householdId={householdId} />
-          <DebtProgress debts={debts} currentMonth={currentMonth} />
+          <ScrollReveal direction="left" delay={0.4}>
+            <QuickAddExpense householdId={householdId} />
+          </ScrollReveal>
+          <ScrollReveal direction="left" delay={0.5}>
+            <DebtProgress debts={debts} currentMonth={currentMonth} />
+          </ScrollReveal>
         </div>
       </div>
     </div>

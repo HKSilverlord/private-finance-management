@@ -1,5 +1,6 @@
 import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
+import { DashboardSmoothScroll } from '@/components/layout/DashboardSmoothScroll';
 
 export default function DashboardLayout({
   children,
@@ -8,6 +9,7 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="min-h-screen bg-background">
+      <DashboardSmoothScroll />
       <Sidebar />
       <div className="md:pl-64">
         <Header />
