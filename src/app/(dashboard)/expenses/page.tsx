@@ -15,24 +15,21 @@ import { DailyExpense } from '@/types/database';
 import { Sun, CloudSun, Moon } from 'lucide-react';
 
 const timeIcons = {
-  'SÃ¡ng': Sun,
-  'TrÆ°a': CloudSun,
-  'Tá»‘i': Moon,
+  'Sáng': Sun,
+  'Trưa': CloudSun,
+  'Tối': Moon,
 };
 
 const timeColors = {
-  'SÃ¡ng': 'bg-yellow-100 text-yellow-800',
-  'TrÆ°a': 'bg-orange-100 text-orange-800',
-  'Tá»‘i': 'bg-indigo-100 text-indigo-800',
+  'Sáng': 'bg-yellow-100 text-yellow-800',
+  'Trưa': 'bg-orange-100 text-orange-800',
+  'Tối': 'bg-indigo-100 text-indigo-800',
 };
 
 export default async function ExpensesPage() {
   const supabase = await createClient();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect('/login');
 
   const { data: profile } = await supabase
@@ -42,7 +39,7 @@ export default async function ExpensesPage() {
     .single();
 
   if (!profile?.household_id) {
-    return <div>Dang tai...</div>;
+    return <div>Đang tải...</div>;
   }
 
   const currentMonth = getFirstDayOfMonth();
@@ -65,16 +62,16 @@ export default async function ExpensesPage() {
   }, {});
 
   const totalByTime = {
-    'SÃ¡ng': expenses?.filter((expense) => expense.time_of_day === 'SÃ¡ng').reduce((sum, expense) => sum + expense.amount, 0) ?? 0,
-    'TrÆ°a': expenses?.filter((expense) => expense.time_of_day === 'TrÆ°a').reduce((sum, expense) => sum + expense.amount, 0) ?? 0,
-    'Tá»‘i': expenses?.filter((expense) => expense.time_of_day === 'Tá»‘i').reduce((sum, expense) => sum + expense.amount, 0) ?? 0,
+    'Sáng': expenses?.filter((e) => e.time_of_day === 'Sáng').reduce((sum, e) => sum + e.amount, 0) ?? 0,
+    'Trưa': expenses?.filter((e) => e.time_of_day === 'Trưa').reduce((sum, e) => sum + e.amount, 0) ?? 0,
+    'Tối': expenses?.filter((e) => e.time_of_day === 'Tối').reduce((sum, e) => sum + e.amount, 0) ?? 0,
   };
   const total = Object.values(totalByTime).reduce((sum, value) => sum + value, 0);
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Chi tieu hang ngay</h1>
+        <h1 className="text-2xl font-bold">Chi tiêu hàng ngày</h1>
         <p className="text-muted-foreground">{formatMonth(new Date())}</p>
       </div>
 
@@ -82,14 +79,14 @@ export default async function ExpensesPage() {
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Tong chi tieu
+              Tổng chi tiêu
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{formatCurrency(total)}</div>
           </CardContent>
         </Card>
-        {(['SÃ¡ng', 'TrÆ°a', 'Tá»‘i'] as const).map((time) => {
+        {(['Sáng', 'Trưa', 'Tối'] as const).map((time) => {
           const Icon = timeIcons[time];
           return (
             <Card key={time}>
@@ -125,9 +122,9 @@ export default async function ExpensesPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Buoi</TableHead>
-                      <TableHead>So tien</TableHead>
-                      <TableHead>Ghi chu</TableHead>
+                      <TableHead>Buổi</TableHead>
+                      <TableHead>Số tiền</TableHead>
+                      <TableHead>Ghi chú</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -140,7 +137,7 @@ export default async function ExpensesPage() {
                               variant="secondary"
                               className={timeColors[expense.time_of_day as keyof typeof timeColors]}
                             >
-                              <Icon className="h-3 w-3 mr-1" />
+                              {Icon && <Icon className="h-3 w-3 mr-1" />}
                               {expense.time_of_day}
                             </Badge>
                           </TableCell>
@@ -163,7 +160,7 @@ export default async function ExpensesPage() {
         {(!expenses || expenses.length === 0) && (
           <Card>
             <CardContent className="p-6 text-center text-muted-foreground">
-              Chua co chi tieu nao trong thang nay
+              Chưa có chi tiêu nào trong tháng này
             </CardContent>
           </Card>
         )}

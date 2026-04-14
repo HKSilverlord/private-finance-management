@@ -4,7 +4,8 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'Quản Lý Chi Phí - Ứng dụng quản lý tài chính cá nhân',
   description: 'Quản lý chi tiêu, theo dõi nợ, và lập kế hoạch tài chính cho gia đình',
-};
+  charset: 'utf-8',
+} as Metadata & { charset: string };
 
 export default function RootLayout({
   children,
