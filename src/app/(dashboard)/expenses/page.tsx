@@ -13,6 +13,7 @@ import {
 import { formatCurrency, formatDate, formatMonth, getFirstDayOfMonth } from '@/utils/format';
 import { DailyExpense } from '@/types/database';
 import { Sun, CloudSun, Moon } from 'lucide-react';
+import { StaggerReveal } from '@/components/landing/StaggerReveal';
 
 const timeIcons = {
   'Sáng': Sun,
@@ -69,7 +70,7 @@ export default async function ExpensesPage() {
   const total = Object.values(totalByTime).reduce((sum, value) => sum + value, 0);
 
   return (
-    <div className="space-y-6">
+    <StaggerReveal className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Chi tiêu hàng ngày</h1>
         <p className="text-muted-foreground">{formatMonth(new Date())}</p>
@@ -165,6 +166,6 @@ export default async function ExpensesPage() {
           </Card>
         )}
       </div>
-    </div>
+    </StaggerReveal>
   );
 }

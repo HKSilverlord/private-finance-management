@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { formatCurrency, formatMonth, getFirstDayOfMonth } from '@/utils/format';
 import { CreditCard, Building, Landmark } from 'lucide-react';
+import { StaggerReveal } from '@/components/landing/StaggerReveal';
 
 const debtTypeIcons = {
   credit_card: CreditCard,
@@ -47,7 +48,7 @@ export default async function DebtsPage() {
   const monthlyPayments = debts?.filter(d => d.is_active).reduce((sum, d) => sum + d.monthly_payment, 0) ?? 0;
 
   return (
-    <div className="space-y-6">
+    <StaggerReveal className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Nợ & Thẻ tín dụng</h1>
         <p className="text-muted-foreground">{formatMonth(new Date())}</p>
@@ -163,6 +164,6 @@ export default async function DebtsPage() {
           </Card>
         )}
       </div>
-    </div>
+    </StaggerReveal>
   );
 }

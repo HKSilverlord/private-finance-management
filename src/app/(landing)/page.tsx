@@ -5,6 +5,8 @@ import { StickyShowcase } from '@/components/landing/StickyShowcase';
 import { LandingFooter } from '@/components/landing/LandingFooter';
 import { ScrollReveal } from '@/components/landing/ScrollReveal';
 
+export const dynamic = 'force-static';
+
 export default function LandingPage() {
   return (
     <>

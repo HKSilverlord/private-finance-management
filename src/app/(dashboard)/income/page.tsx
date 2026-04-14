@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { formatCurrency, formatMonth, getFirstDayOfMonth } from '@/utils/format';
 import { User } from 'lucide-react';
+import { StaggerReveal } from '@/components/landing/StaggerReveal';
 
 export default async function IncomePage() {
   const supabase = await createClient();
@@ -39,7 +40,7 @@ export default async function IncomePage() {
   const totalIncome = monthlyIncomes?.reduce((sum, i) => sum + i.amount, 0) ?? 0;
 
   return (
-    <div className="space-y-6">
+    <StaggerReveal className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Thu nhập</h1>
         <p className="text-muted-foreground">{formatMonth(new Date())}</p>
@@ -112,6 +113,6 @@ export default async function IncomePage() {
           )}
         </div>
       </div>
-    </div>
+    </StaggerReveal>
   );
 }
