@@ -1,7 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { Wallet } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 export function LandingNavbar() {
   return (
     <nav className="fixed top-0 w-full z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
@@ -13,12 +15,12 @@ export function LandingNavbar() {
         <div className="hidden md:flex items-center gap-8">
           <a href="#tinh-nang" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Tính năng</a>
           <a href="#huong-dan" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Hướng dẫn</a>
-          <Button variant="ghost" className="mr-2" asChild>
-            <Link href="/login">Đăng nhập</Link>
-          </Button>
-          <Button asChild>
-            <Link href="/register">Đăng ký ngay</Link>
-          </Button>
+          <Link href="/login" className={cn(buttonVariants({ variant: "ghost" }), "mr-2")}>
+            Đăng nhập
+          </Link>
+          <Link href="/register" className={cn(buttonVariants({ variant: "default" }))}>
+            Đăng ký ngay
+          </Link>
         </div>
       </div>
     </nav>
