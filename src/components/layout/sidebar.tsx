@@ -18,11 +18,11 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 
 const navigation = [
-  { name: 'Tong quan', href: '/', icon: LayoutDashboard },
-  { name: 'No & The tin dung', href: '/debts', icon: CreditCard },
-  { name: 'Thu nhap', href: '/income', icon: Wallet },
-  { name: 'Chi tieu hang ngay', href: '/expenses', icon: Receipt },
-  { name: 'Cai dat', href: '/settings', icon: Settings },
+  { name: 'Tổng quan', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Nợ & Thẻ tín dụng', href: '/debts', icon: CreditCard },
+  { name: 'Thu nhập', href: '/income', icon: Wallet },
+  { name: 'Chi tiêu hàng ngày', href: '/expenses', icon: Receipt },
+  { name: 'Cài đặt', href: '/settings', icon: Settings },
 ];
 
 function NavItems({ onItemClick }: { onItemClick?: () => void }) {
@@ -67,7 +67,7 @@ export function Sidebar() {
       <div className="flex flex-col flex-grow border-r bg-card px-4 py-6">
         <div className="flex items-center gap-2 px-2 mb-8">
           <Wallet className="h-8 w-8 text-primary" />
-          <span className="text-xl font-bold">Quan Ly Chi Phi</span>
+          <span className="text-xl font-bold">Quản Lý Chi Phí</span>
         </div>
 
         <div className="flex-1">
@@ -81,7 +81,7 @@ export function Sidebar() {
             onClick={handleLogout}
           >
             <LogOut className="h-5 w-5" />
-            Dang xuat
+            Đăng xuất
           </Button>
         </div>
       </div>
@@ -112,7 +112,7 @@ export function MobileSidebar() {
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
               <Wallet className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold">Quan Ly Chi Phi</span>
+              <span className="text-xl font-bold">Quản Lý Chi Phí</span>
             </div>
           </div>
 
@@ -127,7 +127,7 @@ export function MobileSidebar() {
               onClick={handleLogout}
             >
               <LogOut className="h-5 w-5" />
-              Dang xuat
+              Đăng xuất
             </Button>
           </div>
         </div>

@@ -129,7 +129,7 @@ The app uses **OKLCH-based CSS variables** for perceptually uniform theming with
 
 ## 🛠️ Skills Reference
 
-### All 8 Project-Specific Skills
+### All 9 Project-Specific Skills
 
 | # | Skill | Path | Covers |
 |---|-------|------|--------|
@@ -141,6 +141,7 @@ The app uses **OKLCH-based CSS variables** for perceptually uniform theming with
 | 6 | **data-visualization** | `skills/data-visualization/SKILL.md` | Recharts charts, KPI cards, chart colors, VND formatting, dashboard patterns |
 | 7 | **database-schema** | `skills/database-schema/SKILL.md` | PostgreSQL schema, 9 tables, RLS policies, triggers, indexes, migration conventions |
 | 8 | **scrollytelling-sticky-animations** | `skills/scrollytelling-sticky-animations/SKILL.md` | Scroll-driven landing pages, sticky pinned sections, Lenis smooth scrolling, GSAP ScrollTrigger scrub/pin, Framer Motion `whileInView` reveals, stagger animations, AOS, Intersection Observer, hero patterns, conversion-optimized section architecture, 2026 design trends |
+| 9 | **eslint-code-quality** | `skills/eslint-code-quality/SKILL.md` | Next.js/React code quality, ESLint configurations, strict type checking, and standardizing formatting |
 
 ### Skill Selection Matrix
 
@@ -158,6 +159,7 @@ The app uses **OKLCH-based CSS variables** for perceptually uniform theming with
 | Add scroll-triggered reveal animations | **scrollytelling-sticky-animations** | tailwind-v4-theming |
 | Create sticky pinned scroll sections | **scrollytelling-sticky-animations** | — |
 | Implement smooth scrolling | **scrollytelling-sticky-animations** | — |
+| Write or fix linting/formatting issues | **eslint-code-quality** | nextjs-app-router |
 
 ---
 
