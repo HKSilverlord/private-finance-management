@@ -13,12 +13,12 @@ export function LandingNavbar() {
         <div className="hidden md:flex items-center gap-8">
           <a href="#tinh-nang" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Tính năng</a>
           <a href="#huong-dan" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Hướng dẫn</a>
-          <Link href="/login">
-            <Button variant="ghost" className="mr-2">Đăng nhập</Button>
-          </Link>
-          <Link href="/register">
-            <Button>Đăng ký ngay</Button>
-          </Link>
+          <Button variant="ghost" className="mr-2" asChild>
+            <Link href="/login">Đăng nhập</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/register">Đăng ký ngay</Link>
+          </Button>
         </div>
       </div>
     </nav>
