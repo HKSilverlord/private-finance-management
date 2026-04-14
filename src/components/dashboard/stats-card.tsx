@@ -2,13 +2,13 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { LucideIcon } from 'lucide-react';
+import { ReactNode } from 'react';
 
 interface StatsCardProps {
   title: string;
   value: string;
   description?: string;
-  icon: LucideIcon;
+  icon?: ReactNode;
   trend?: {
     value: number;
     isPositive: boolean;
@@ -21,7 +21,7 @@ export function StatsCard({
   title,
   value,
   description,
-  icon: Icon,
+  icon,
   trend,
   className,
   valueClassName,
@@ -32,7 +32,7 @@ export function StatsCard({
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
         </CardTitle>
-        <Icon className="h-5 w-5 text-muted-foreground" />
+        {icon && <span className="text-muted-foreground">{icon}</span>}
       </CardHeader>
       <CardContent>
         <div className={cn('text-2xl font-bold', valueClassName)}>{value}</div>
